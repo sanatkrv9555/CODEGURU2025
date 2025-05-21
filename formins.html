@@ -1,0 +1,183 @@
+<style>
+    .instructor {
+        background-color: #f9f9f9;
+        padding: 40px 0;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .instructor-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h2 {
+        font-size: 24px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 16px;
+        color: #666;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .instructor-form {
+        display: grid;
+        gap: 20px;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select,
+    input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    textarea {
+        resize: vertical;
+        height: 120px;
+    }
+
+    input[type="file"] {
+        padding: 5px;
+    }
+
+    select {
+        background-color: #fff;
+    }
+
+    .teacher-btn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        width: 100%;
+    }
+
+    .teacher-btn:hover {
+        background-color: #45a049;
+    }
+
+    .teacher-btn:active {
+        background-color: #3e8e41;
+    }
+</style>
+
+<section class="instructor">
+    <div class="instructor-container">
+        <h2>Post Your Course – Become a Guru and Inspire Future Coders</h2>
+        <p>Share your knowledge and expertise by posting your course on Code Guru. As a Guru, you’ll guide learners on their programming journey, helping them grow their skills and reach their goals. Empower the next generation of coders and make a lasting impact in the world of education!</p>
+        
+        <form class="instructor-form">
+            <!-- Course Title -->
+            <label for="course-title">Course Title</label>
+            <input type="text" id="course-title" name="course-title" required placeholder="Enter the course title">
+
+            <!-- Instructor Name -->
+            <label for="instructor-name">Instructor Name</label>
+            <input type="text" id="instructor-name" name="instructor-name" required placeholder="Enter your name">
+
+            <!-- Course Description -->
+            <label for="course-description">Course Description</label>
+            <textarea id="course-description" name="course-description" required placeholder="Describe the course content and what learners will gain"></textarea>
+
+            <!-- Category -->
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                <option value="Programming">Programming</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Data Science">Data Science</option>
+                <option value="Machine Learning">Machine Learning</option>
+                <option value="Mobile Development">Mobile Development</option>
+            </select>
+
+            <!-- Course Image -->
+            <label for="course-image">Course Image</label>
+            <input type="file" id="course-image" name="course-image" required accept="image/*">
+
+            <!-- Contact Email -->
+            <label for="contact-email">Contact Email</label>
+            <input type="email" id="contact-email" name="contact-email" required placeholder="Enter your contact email">
+
+            <!-- Submit Button -->
+            <button type="submit" class="teacher-btn btn">Submit Your Details</button>
+        </form>
+        <section id="courses">
+            <h2>New Courses Added Successfully</h2>
+            <div id="course-list" style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">
+                <!-- New courses will be appended here -->
+            </div>
+        </section>
+        
+    </div>
+</section>
+<script>
+	document.querySelector('.instructor-form').addEventListener('submit', function (e) {
+		e.preventDefault();
+	
+		// Get form data
+		const title = document.getElementById('course-title').value.trim();
+		const instructor = document.getElementById('instructor-name').value.trim();
+		const description = document.getElementById('course-description').value.trim();
+		const category = document.getElementById('category').value;
+		const imageFile = document.getElementById('course-image').files[0];
+		const email = document.getElementById('contact-email').value.trim();
+	
+		// Validate input
+		if (!title || !instructor || !description || !category || !imageFile || !email) {
+			alert('All fields are required!');
+			return;
+		}
+	
+		// Read image file and create course card
+		const reader = new FileReader();
+		reader.onload = function () {
+			const courseList = document.getElementById('course-list'); // Ensure this div exists on your main page
+			const courseCard = document.createElement('div');
+			courseCard.classList.add('course-card');
+			courseCard.innerHTML = `
+				<div class="course-card">
+					<img src="${reader.result}" alt="${title}" style="width:100%; border-radius:8px;">
+					<h3>${title}</h3>
+					<p>${description}</p>
+					<p><strong>Instructor:</strong> ${instructor}</p>
+					<p><strong>Category:</strong> ${category}</p>
+					<p><strong>Contact:</strong> <a href="mailto:${email}">${email}</a></p>
+				</div>
+			`;
+			courseList.appendChild(courseCard); // Append the course card to the main page
+		};
+	
+		reader.onerror = function () {
+			alert('Failed to load image. Please try again.');
+		};
+	
+		reader.readAsDataURL(imageFile);
+	
+		// Clear the form after submission
+		e.target.reset();
+	});
+</script>
